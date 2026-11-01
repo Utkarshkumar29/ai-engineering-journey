@@ -1,0 +1,24 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+credentials.json
+
+# Dependencies and build output
+node_modules/
+.next/
+dist/
+build/
+coverage/
+
+# Local data and logs
+*.log
+.n8n/
+data/
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
