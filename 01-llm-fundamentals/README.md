@@ -4,7 +4,7 @@ Notes and experiments on how large language models work and how to use them in r
 
 ## Topics
 
-- [ ] Tokens and context windows
+- [x] Tokens and context windows
 - [ ] Inference and model limitations
 - [ ] Prompt structure
 - [ ] Structured outputs
