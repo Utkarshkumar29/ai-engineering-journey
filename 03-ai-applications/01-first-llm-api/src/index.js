@@ -1,43 +1,47 @@
 import "dotenv/config"
 
-const apiCallHandler=async(req,res)=>{
+
+import "dotenv/config";
+
+const apiCallHandler = async () => {
     try {
-        const response=await fetch('https://api.openai.com/v1/responses',{
-            method:"POST",
-            headers:{
-                Authorization:`Bearer ${process.env.OPENAI_API_KEY}`,
-                "Content-Type":"application/json"
-            },
-            body: JSON.stringify({
-                model: "gpt-6-astra",
-                input: "Write a one-sentence bedtime story about a unicorn.",
-            })
-        })
+        const apiKey = process.env.GEMINI_API_KEY;
 
-          if (!response.ok) {
-            const errorData = await response.json();
+        console.log("API key loaded:", Boolean(apiKey));
 
-            console.error("OpenAI API Error:", errorData);
-
-            return res.status(response.status).json({
-                message: "Failed to generate AI response",
-                error: errorData.error?.message,
-            });
+        if (!apiKey) {
+            throw new Error("GEMINI_API_KEY is missing");
         }
-        
+
+        const response = await fetch(
+            "https://generativelanguage.googleapis.com/v1beta/interactions",
+            {
+                method: "POST",
+                headers: {
+                    "x-goog-api-key": apiKey,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    model: "gemini-3.8-flash",
+                    input: "Write a one-sentence bedtime story about a unicorn."
+                })
+            }
+        );
+
         const data = await response.json();
 
-        return res.status(200).json({
-            success: true,
-            response: data.output_text,
-            usage: data.usage,
-        });
-    } catch (error) {
-        console.log(error)
-        return res.status(500).send({message:"Internal Server Error"})
-    }
-}
+        if (!response.ok) {
+            console.error("Gemini API Error:", data);
+            return;
+        }
 
-apiCallHandler()
+        console.log("Gemini Response:", data);
+
+    } catch (error) {
+        console.error("Error:", error.message);
+    }
+};
+
+apiCallHandler();
 
 export default apiCallHandler
